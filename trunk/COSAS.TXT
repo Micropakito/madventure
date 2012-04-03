@@ -1,0 +1,144 @@
+
+====================================
+GOOGLE DOCS, ESTÁ EN GOOGLE DOCS
+====================================
+
+PUES VAMOS A VER....
+
+ESTO ES UN FRAMEWORK!! NO ES UNA AVENTURA!!!
+
+Un framework para crear aventuras en php, javascript, y CSS. Pero para gente que sepa lo que se hace...
+
+
+29.03.2012
+==========
+
+No entiendo a donde quería llegar con el patrón singleton. No puedo tener una instancia de la sala en la que está el player... porque sencillamante es una locura.
+
+¿Y cuando entre otro player?
+
+Lo que tengo que hacer es gestionar el presente en una clase que sea de Usuario/Jugador. Uno de los atributos tiene que ser... habitación. Eso es la habitación presente. 
+
+TODO
+=====
+
+* Una acción con x objetos.
+	Hacer un método dinámico, con 3 objetos, ejecutar acción, de un objeto pasándole el resto de objeto.
+* Validar verbo. Opciones:	
+	a.- validar contra lista fija (validación más rápida por el tema de los sinónimos, derivaciones, etc)
+		
+		XML  .- Odio ese fomato
+		YAML .- Por lo menos es modernillo...
+		
+			abrir: [abrir, abriendo, open ]
+			cerrar: [cerrado, close ]
+				
+		PHP .-
+			$data = array ( 
+				 
+				 'abrir' => 
+					array ( 0 => 'abrir', 
+							1 => 'open'
+							2 => 'abriendo' )
+		
+		
+	El algoritmo, busca la palabra que yo he puesto, y devuelve el padre, que es la acción propiamente dicha.
+	
+	b.- buscar el verbo como nombre de una clase (Es muy poco dinámico) - DESCARTO
+	
+* Validar Objeto: 
+
+	Llevarme lo mismo que para los verbos, para los objetos.
+		- Esto me da por el culo. Porque no me gusta que los sinónimos tengan que separarse de las clases... Es lo mismo que con los verbos... Así que si funciona con los verbos tiene que funcionar igual con esto. Cómo mucho puedo declararlos como atributos y después hacer un programa que se ejecute sólo la primera vez que se arranque la aplicación, lea esos atributos y los vuelque en un fichero. Pero tienen que estar en algún sitio, porque no voy a leer todas las clases cada vez que busque una acción.
+		- Cómo al fin y al cabo voy a tener que persistir contra base de datos... otra opción es guardar los sinónimos en base de datos... y cargarlos cuando arranque la aplicación, y almacenar los verbos en sesión o en un objeto singleton.
+		
+		
+* Multilenguaje
+* Métodos de base, para habitación, objetos, personas.
+	Tendrán que estar en las clases bases las acciones de mirar. Este método, sin sobreescribir mostrará 
+		* el atributo descripción de la clase, 
+		* las salidas que tengan el atributo de visible a true, 
+		* los objetos que tengan su propiedad de visible a true.
+	
+* Interface: Como marcar los mensajes de salida para que sean tratados de diferene forma... 
+	- Todo el interface va a cargo del CSS...
+
+	- Idea: Hacerlo muy dinámico, y definir los tipos de mensaje de salida a mano, y que sea un mapping con la hoja CSS. Es decir, que por ejemplo sea:
+		print_message_on_console("troloro", $mensaje); "troloro" será una clase en el css. Si luego yo la defino en negro, pintará el mensaje en negro y tal...
+	- 
+	
+* Mapa? Para eso debo crear un atributo que sea visitado en las habitaciones. 
+		* Fichero de configuración: Tiene_Mapa = SI
+
+* El usuario debería ser RPG (Características y tal...);
+	[Tocharro 2.0]
+
+* Batalla
+	[Tocharro 2.0]
+	
+* Multiplayer:
+	[Tocharro 2.0]
+	
+* Persistencia -> Base de datos
+	- Poder salvar, poder logar a un user...
+
+* Salvar aventura...
+
+
+	
+=====
+
+Me encuentro ante un problema:
+	Cuando tengo que ejecutar un método de un objeto que no existe... Tiene sentido, bien mirado.
+	
+	Por ejemplo, digo, arrancar motosierra. Para poder ejecutar el método arrancar del objeto motosierra, tiene que existir ese objeto. ¿Y donde se instancia este objeto? Pues como en la vida real:
+		Un objeto debe estar en una habitación, llevarlo yo, o llevarlo otra persona.
+		
+	Por lo tanto los objetos estarán definidos en :
+	
+		Habitación: La habitación tiene objetos. 
+		Protagonista: Es la mochila.
+		Persona: La mochila de esa persona.
+		
+	¿Como están definidos ? Opciones:
+		Atributos de la clase:
+			Contra=> no me gusta cómo se ve, es poco visual y me obliga a tener ciertas propiedades en los objetos, como son: 
+				existe o no existe (eso lo salvo preguntando si existe o no en una pila)
+		Pila de Objetos:
+			Pro => es más visual.
+				=> gestionar la pila es genérico a todo, y en php como cuela cualquier tipo de objeto (o eso parece)
+			Contra 	=> Me obliga a gestionar una pila
+					=> Necesito un método para instanciar la pila
+						Aparentemente esto no es un contra, por la gestión que hace php sobre los arrays:
+					=> Necesito atributos ( visible / oculto )
+		
+Por lo tanto, cuando ejecuto una acción de UN objeto, el algoritmo sería
+	
+	Busco verbo en lista de sinónimos de acciones
+		|
+	Si tiene 1 objeto
+		|
+	Busco objeto en la lista de sinónimos de objetos
+		|
+	Busco el objeto en la pila de objetos de la habitación
+		|
+	Busco el objeto en la pila de objetos del prota
+		|
+	Busco el objeto en la pila de objetos de los personajes de la habitación.
+	
+	La primera ocurrencia de objeto, ejecuto acción.	
+	
+	
+	
+habitación
+		Atributos:
+			Pila de objetos.
+			Pila de Personajes. (Sin protagonista, ya que doy por hecho que el prota siempre está)
+			Salida Norte
+			Salida Sur
+			Salida Este
+			Salida Oeste
+	
+
+
+	
